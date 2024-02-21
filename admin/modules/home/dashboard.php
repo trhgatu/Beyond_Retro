@@ -2,12 +2,19 @@
 if (!defined("_CODE")) {
     die("Access Denied !");
 }
+$data = [
+    'pageTitle' => 'Dashboard'
+];
+//Kiểm tra trạng thái đăng nhập
+if (!isLogin()) {
+    redirect('?module=authen&action=login');
+}
 ?>
 <div id="wrapper">
 
     <!-- Sidebar -->
     <?php
-    require_once(_WEB_PATH_TEMPLATE . '/layout/sidebar.php');
+    layouts('sidebar', $data);
     ?>
 
     <!-- End of Sidebar -->
@@ -15,9 +22,9 @@ if (!defined("_CODE")) {
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
         <?php
-        require_once(_WEB_PATH_TEMPLATE . '/layout/header.php');
+        layouts('header', $data);
 
-        require_once(_WEB_PATH_TEMPLATE . '/layout/footer.php');
+        layouts('footer', $data);
         ?>
     </div>
     <!-- End of Content Wrapper -->

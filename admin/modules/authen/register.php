@@ -65,7 +65,7 @@ if (isPost()) {
         if($insertStatus)
         {
         //Tạo link kích hoạt tài khoản
-        $linkActive = _WEB_HOST . '?module=authen&action=active&token' . $activeToken;
+        $linkActive = _WEB_HOST . '?module=authen&action=active&token=' . $activeToken;
         //Thiết lập gửi mail
         $subject = $filterAll['fullname'].'Vui lòng kích hoạt tài khoản';
         $content= 'Chào' . $filterAll['fullname'].'.</>';

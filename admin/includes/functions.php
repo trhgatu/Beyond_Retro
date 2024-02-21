@@ -35,7 +35,7 @@ function sendMail($to, $subject, $content)
         $mail->setFrom('trananhtu1112003@gmail.com', 'Anh Tú');
         $mail->addAddress($to);     //Add a recipient
         //Content
-        $mail-> CharSet = "UTF-8";
+        $mail->CharSet = "UTF-8";
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = $subject;
         $mail->Body = $content;
@@ -163,4 +163,21 @@ function form_error($fileName, $beforeHtml = '', $afterHtml = '', $error)
 function old($fileName, $oldData, $default = null)
 {
     return (!empty($oldData[$fileName])) ? $oldData[$fileName] : $default;
+}
+//Hàm kiểm tra trạng thái đăng nhập
+function isLogin()
+{
+    //Kiểm tra trạng thái đăng nhập
+    $checkLogin = false;
+    if (getSession('tokenlogin')) {
+        $tokenLogin = getSession('tokenLogin');
+        //Kiểm tra token giống trong database
+        $queryToken = oneRaw("SELECT user_id FROM tokenlogin WHERE token = '$tokenLogin' ");
+        if (!empty($queryToken)) {
+            $checkLogin = true;
+        } else {
+            removeSession('tokenlogin');
+        }
+    }
+    return $checkLogin;
 }

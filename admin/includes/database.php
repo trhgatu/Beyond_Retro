@@ -43,12 +43,26 @@ function update($table, $data, $condition = '')
         $update .= $key . '= :' . $key . ', ';
     }
     $update = rtrim($update, ', ');
+
+    $sql = 'UPDATE ' . $table . ' SET ' . $update;
     if (!empty($condition)) {
-        $sql = 'UPDATE ' . $table . ' SET ' . $update . ' WHERE ' . $condition;
-    } else {
-        $sql = 'UPDATE ' . $table . ' SET ' . $update;
+        $sql .= ' WHERE ' . $condition;
     }
 
+    try {
+        $db = new PDO('mysql:host=localhost;dbname=fashionweb', 'root', 'mysql');
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $stmt = $db->prepare($sql);
+        foreach ($data as $key => &$value) {
+            $stmt->bindParam(':' . $key, $value);
+        }
+
+        $result = $stmt->execute();
+        return $result; // Trả về true nếu cập nhật thành công, false nếu không thành công
+    } catch (PDOException $e) {
+        return false; // Cập nhật không thành công
+    }
 }
 //Hàm delete
 function delete($table, $condition = '')
