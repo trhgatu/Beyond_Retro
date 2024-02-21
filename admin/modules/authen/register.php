@@ -3,7 +3,9 @@
 if (!defined("_CODE")) {
     die("Access Denied !");
 }
-
+$data = [
+    'pageTitle' => 'Đăng ký tài khoản'
+];
 if (isPost()) {
     $filterAll = filter();
     $error = [];//Mảng chữa lỗi
@@ -50,7 +52,7 @@ if (isPost()) {
         }
     }
     if (empty($error)) {
-        $activeToken =sha1(uniqid().time());
+        $activeToken = sha1(uniqid() . time());
         $dataInsert = [
             'fullname' => $filterAll['fullname'],
             'email' => $filterAll['email'],
@@ -59,37 +61,34 @@ if (isPost()) {
             'activeToken' => $activeToken,
             'created_at' => date('Y-m-d H:i:s'),
         ];
-        $insertStatus = insert('user',$dataInsert);
+        $insertStatus = insert('user', $dataInsert);
 
 
-        if($insertStatus)
-        {
-        //Tạo link kích hoạt tài khoản
-        $linkActive = _WEB_HOST . '?module=authen&action=active&token=' . $activeToken;
-        //Thiết lập gửi mail
-        $subject = $filterAll['fullname'].'Vui lòng kích hoạt tài khoản';
-        $content= 'Chào' . $filterAll['fullname'].'.</>';
-        $content .='Click vào link này để kích hoạt tài khoản : </br>';
-        $content .= $linkActive . '</br>';
-        $content .= 'Trân trọng cảm ơn';
-        //GỬi mail
-        $sendMail = sendMail($filterAll['email'], $subject, $content);
-        if($sendMail){
-            setFlashData('msg', 'Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
-            setFlashData('msg_type', 'success');
-        }
-        else
-        {
-            setFlashData('msg', 'Hệ thống đang gặp sự cố, vui lòng thử lại sau');
+        if ($insertStatus) {
+            //Tạo link kích hoạt tài khoản
+            $linkActive = _WEB_HOST . '?module=authen&action=active&token=' . $activeToken;
+            //Thiết lập gửi mail
+            $subject = $filterAll['fullname'] . 'Vui lòng kích hoạt tài khoản';
+            $content = 'Chào' . $filterAll['fullname'] . '.</>';
+            $content .= 'Click vào link này để kích hoạt tài khoản : </br>';
+            $content .= $linkActive . '</br>';
+            $content .= 'Trân trọng cảm ơn';
+            //GỬi mail
+            $sendMail = sendMail($filterAll['email'], $subject, $content);
+            if ($sendMail) {
+                setFlashData('msg', 'Đăng ký thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+                setFlashData('msg_type', 'success');
+            } else {
+                setFlashData('msg', 'Hệ thống đang gặp sự cố, vui lòng thử lại sau');
+                setFlashData('msg_type', 'danger');
+            }
+
+        } else {
+            setFlashData('msg', 'Đăng ký thất bại');
             setFlashData('msg_type', 'danger');
         }
-
-    }else{
-        setFlashData('msg', 'Đăng ký thất bại');
-        setFlashData('msg_type', 'danger');
-    }
-    redirect('?module=authen&action=register');
-}else{
+        redirect('?module=authen&action=register');
+    } else {
         setFlashData('msg', 'Vui lòng kiểm tra lại dữ liệu');
         setFlashData('msg_type', 'danger');
         setFlashData('error', $error);
@@ -147,7 +146,8 @@ $old = getFlashData('old');
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="Số điện thoại" name="phone_number" value="<?php
+                                            id="exampleInputPassword" placeholder="Số điện thoại" name="phone_number"
+                                            value="<?php
                                             echo old('phone_number', $old)
                                                 ?>">
                                         <?php
@@ -206,8 +206,6 @@ $old = getFlashData('old');
 
     </div>
 </body>
-
-</html>
 <?php
-layouts('footer', $data);
+layouts('style',$data);
 ?>

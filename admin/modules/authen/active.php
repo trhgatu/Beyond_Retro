@@ -10,7 +10,6 @@ $token = filter()['token'];
 if (!empty($token)) {
     //Truy vấn kiểm tra token với db
     $tokenQuery = oneRaw("SELECT id FROM user WHERE activeToken = '$token'");
-    var_dump($tokenQuery);
     if (!empty($tokenQuery)) {
         $userId = $tokenQuery['id'];
         $dataUpdate = [
@@ -39,5 +38,4 @@ if (!empty($token)) {
 
 <?php
 layouts('footer');
-
 ?>

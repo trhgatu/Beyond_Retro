@@ -136,7 +136,7 @@ $msg_type = getFlashData('msg_type');
 
 </body>
 
-</html>
 <?php
-layouts('footer', $data);
+layouts('footer');
+layouts('style',$data);
 ?>
