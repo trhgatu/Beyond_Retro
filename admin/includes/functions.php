@@ -169,8 +169,8 @@ function isLogin()
 {
     $checkLogin = false;
     //Kiểm tra trạng thái đăng nhập
-    if (getSession('tokenlogin')) { // Sửa 'tokenLogin' thành 'tokenlogin'
-        $tokenLogin = getSession('tokenlogin'); // Sửa 'tokenLogin' thành 'tokenlogin'
+    if (getSession('tokenlogin')) {
+        $tokenLogin = getSession('tokenlogin');
         //Kiểm tra token giống trong database
         $queryToken = oneRaw("SELECT user_id FROM tokenlogin WHERE token = '$tokenLogin'");
         if (!empty($queryToken)) {
