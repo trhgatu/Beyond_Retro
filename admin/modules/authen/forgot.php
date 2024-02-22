@@ -10,12 +10,55 @@ if (isLogin()) {
     redirect('?module=authen&action=login');
 }
 if (isPost()) {
+    $filterAll = filter();
+    if (!empty($filterAll['email'])) {
+        $email = $filterAll['email'];
+        $queryUser = oneRaw("SELECT id FROM user WHERE email = '$email'");
+        if (!empty($queryUser)) {
+            $userId = $queryUser['id'];
+            //Tạo forgot token
+            $forgotToken = sha1(uniqid() . time());
+            $dataUpdate = [
+                'forgotToken' => $forgotToken,
+            ];
+            $updateStatus = update('user', $dataUpdate, "id=$userId");
+            if ($updateStatus) {
+                //Tạo link reset, khôi phục mật khẩu
+                $linkReset = _WEB_HOST . '?module=authen&action=reset&token=' . $forgotToken;
+                //Gửi mail cho người dùng
+                $subject = 'Yêu cầu khôi phục mật khẩu';
+                $content = 'Chào bạn.</br>';
+                $content .= 'Chúng tôi nhận được yêu cầu khôi phục mật khẩu từ bạn. Vui lòng truy cập vào đường link để khôi phục.';
+                $content .= $linkReset . '</br>';
+                $sendEmail = sendMail($email, $subject, $content);
+                if ($sendEmail) {
+                    setFlashData('msg', 'Vui lòng kiểm tra Email để đặt lại mật khẩu.');
+                    setFlashData('msg_type', 'success');
+                }
+                else{
+                    setFlashData('msg', 'Lỗi hệ thống, vui lòng thử lại.');
+                    setFlashData('msg_type', 'danger');
+                }
+            } else {
+                setFlashData('msg', 'Lỗi hệ thống, vui lòng thử lại.');
+                setFlashData('msg_type', 'danger');
+            }
+        } else {
+            setFlashData('msg', 'Địa chỉ email không tồn tại.');
+            setFlashData('msg_type', 'danger');
+        }
 
+    } else {
+        setFlashData('msg', 'Vui lòng nhập địa chỉ email.');
+        setFlashData('msg_type', 'danger');
+    }
+    // redirect('?module=authen&action=forgot');
 }
 
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 ?>
+
 <body class="bg-gradient-primary">
     <div class="container">
         <!-- Outer Row -->
@@ -42,15 +85,11 @@ $msg_type = getFlashData('msg_type');
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Nhập email" name="email">
                                         </div>
-
-
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Gửi
                                         </button>
                                         <hr>
-
                                     </form>
-
                                     <div class="text-center">
                                         <a class="small" href="?module=authen&action=forgot">Đăng nhập</a>
                                     </div>
@@ -63,14 +102,10 @@ $msg_type = getFlashData('msg_type');
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </body>
 <?php
-layouts('style',$data);
+layouts('style', $data);
 ?>

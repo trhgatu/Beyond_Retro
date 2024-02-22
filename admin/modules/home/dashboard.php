@@ -23,6 +23,7 @@ if (!isLogin()) {
     <div id="content-wrapper" class="d-flex flex-column">
         <?php
         layouts('header', $data);
+        layouts('style', $data);
 
         layouts('footer', $data);
         ?>

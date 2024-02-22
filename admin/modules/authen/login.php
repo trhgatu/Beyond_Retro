@@ -2,23 +2,25 @@
 <?php
 if (!defined("_CODE")) {
     die("Access Denied !");
-
 }
+
 $data = [
     'pageTitle' => 'Đăng nhập tài khoản'
 ];
+
 //Kiểm tra trạng thái đăng nhập
 if (isLogin()) {
-    redirect('?module=authen&action=login');
+    redirect('?module=home&action=dashboard');
 }
+
 if (isPost()) {
     $filterAll = filter();
     if (!empty(trim($filterAll['email'])) && !empty(trim($filterAll['password']))) {
-        //Kiểm tra đăng nhập
         $email = $filterAll['email'];
         $password = $filterAll['password'];
-        //Lấy TT user theo email
+
         $userQuery = oneRaw("SELECT password, id FROM user WHERE email = '$email'");
+
         if (!empty($userQuery)) {
             $passwordHash = $userQuery['password'];
             $userId = $userQuery['id'];
@@ -32,18 +34,16 @@ if (isPost()) {
                     'created_at' => date('Y-m-d H:i:s'),
                 ];
                 $insertStatus = insert('tokenlogin', $dataInsert);
-                if($insertStatus){
-                    //Insert thành công
 
-                    //Lưu token login vào session
-                    setSession('tokenlogin',$tokenLogin);
-                    redirect('?module=home&action=dashboard');
-                }else{
+                if ($insertStatus) {
+                    //insert thành công
+                    //lưu token login vào session
+                    setSession('tokenlogin', $tokenLogin);
+                    redirect('?module=home&action=dashboard'); //Chuyển hướng đến trang dashboard sau khi đăng nhập thành công
+                } else {
                     setFlashData('msg', 'Không thể đăng nhập, vui lòng thử lại sau.');
                     setFlashData('msg_type', 'danger');
                 }
-
-
             } else {
                 setFlashData('msg', 'Mật khẩu không chính xác.');
                 setFlashData('msg_type', 'danger');
@@ -60,10 +60,7 @@ if (isPost()) {
 }
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
-
-
 ?>
-
 
 <body class="bg-gradient-primary">
     <div class="container">
@@ -127,16 +124,12 @@ $msg_type = getFlashData('msg_type');
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </body>
 
 <?php
-layouts('footer');
-layouts('style',$data);
+layouts('footer-login');
+layouts('style', $data);
 ?>

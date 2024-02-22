@@ -102,9 +102,7 @@ $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 $error = getFlashData('error');
 $old = getFlashData('old');
-
 ?>
-
 <body class="bg-gradient-primary">
     <div class="container">
         <div class="card o-hidden border-0 shadow-lg my-5">

@@ -167,12 +167,12 @@ function old($fileName, $oldData, $default = null)
 //Hàm kiểm tra trạng thái đăng nhập
 function isLogin()
 {
-    //Kiểm tra trạng thái đăng nhập
     $checkLogin = false;
-    if (getSession('tokenlogin')) {
-        $tokenLogin = getSession('tokenLogin');
+    //Kiểm tra trạng thái đăng nhập
+    if (getSession('tokenlogin')) { // Sửa 'tokenLogin' thành 'tokenlogin'
+        $tokenLogin = getSession('tokenlogin'); // Sửa 'tokenLogin' thành 'tokenlogin'
         //Kiểm tra token giống trong database
-        $queryToken = oneRaw("SELECT user_id FROM tokenlogin WHERE token = '$tokenLogin' ");
+        $queryToken = oneRaw("SELECT user_id FROM tokenlogin WHERE token = '$tokenLogin'");
         if (!empty($queryToken)) {
             $checkLogin = true;
         } else {
