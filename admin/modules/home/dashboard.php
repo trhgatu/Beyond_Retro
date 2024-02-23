@@ -24,7 +24,6 @@ if (!isLogin()) {
         <?php
         layouts('header', $data);
         layouts('style', $data);
-
         layouts('footer', $data);
         ?>
     </div>
