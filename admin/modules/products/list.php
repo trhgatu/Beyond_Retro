@@ -3,14 +3,14 @@ if (!defined("_CODE")) {
     die("Access Denied !");
 }
 $data = [
-    'pageTitle' => 'Danh sách người dùng'
+    'pageTitle' => 'Danh sách sản phẩm'
 ];
 //Kiểm tra trạng thái đăng nhập
 if (!isLogin()) {
     redirect('?module=authen&action=login');
 }
 //Truy vấn vào bảng user
-$listUsers = getRaw("SELECT * FROM user ORDER BY updated_at");
+$listProducts = getRaw("SELECT * FROM product ORDER BY updated_at");
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 //$error = getFlashData('error');
@@ -30,8 +30,8 @@ $msg_type = getFlashData('msg_type');
                 <div class="card shadow mb-4" style="max-width: 1240px">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">
-                            Danh sách người dùng
-                            <a href="?module=users&action=add" class="btn btn-success btn-sm" style="float:right">Thêm người dùng<i
+                            Danh sách sản phẩm
+                            <a href="?module=products&action=add" class="btn btn-success btn-sm" style="float:right">Thêm sản phẩm mới<i
                                     class="fa-solid fa-plus"></i></a>
                         </h6>
 
@@ -46,19 +46,20 @@ $msg_type = getFlashData('msg_type');
                             <table class="table table-bordered">
                                 <thead>
                                     <th>STT</th>
-                                    <th>Họ tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Trạng thái</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Giá</th>
+                                    <th>Sale</th>
+                                    <th>Ảnh bìa </th>
+                                    <th>Mô tả sản phẩm </th>
                                     <th width="5%">Sửa</th>
                                     <th width="5%">Xóa</th>
 
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if (!empty($listUsers)):
+                                    if (!empty($listProducts)):
                                         $count = 0; //STT
-                                        foreach ($listUsers as $item):
+                                        foreach ($listProducts as $item):
                                             $count++;
                                             ?>
                                             <tr>
@@ -66,16 +67,19 @@ $msg_type = getFlashData('msg_type');
                                                     <?php echo $count; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['fullname'] ?>
+                                                    <?php echo $item['title'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['email'] ?>
+                                                    <?php echo $item['price'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['phone_number'] ?>
+                                                    <?php echo $item['discount'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['status'] == 1 ? '<button class="btn btn-success btn-sm">Đã kích hoạt</button>' : '<button class="btn btn-danger btn-sm">Chưa kích hoạt</button>'; ?>
+                                                    <?php echo $item['thumbnail']?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $item['description']?>
                                                 </td>
                                                 <td><a href="<?php echo _WEB_HOST;?>?module=users&action=edit&id=<?php echo $item['id']?>" class="btn btn-warning btn-sm"><i
                                                             class="fa-solid fa-pen-to-square"></i></a>
@@ -89,9 +93,7 @@ $msg_type = getFlashData('msg_type');
                                         ?>
                                         <tr>
                                             <td colspan="7">
-                                                <div class="alert alert-danger text-center">Không có người dùng nào</div>
-
-
+                                                <div class="alert alert-danger text-center">Không có sản phẩm nào</div>
                                         </tr>
                                         <?php
                                     endif;
