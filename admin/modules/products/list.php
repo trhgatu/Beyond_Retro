@@ -31,24 +31,24 @@ $msg_type = getFlashData('msg_type');
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">
                             Danh sách sản phẩm
-                            <a href="?module=products&action=add" class="btn btn-success btn-sm" style="float:right">Thêm sản phẩm mới<i
-                                    class="fa-solid fa-plus"></i></a>
+                            <a href="?module=products&action=add" class="btn btn-success btn-sm"
+                                style="float:right">Thêm sản phẩm mới<i class="fa-solid fa-plus"></i></a>
                         </h6>
 
                     </div>
                     <?php
-                                if (!empty($msg)) {
-                                    getMSG($msg, $msg_type);
-                                }
-                                ?>
+                    if (!empty($msg)) {
+                        getMSG($msg, $msg_type);
+                    }
+                    ?>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
                                     <th>STT</th>
-                                    <th>Tiêu đề</th>
+                                    <th>Tên sản phẩm</th>
                                     <th>Giá</th>
-                                    <th>Sale</th>
+                                    <th>Giảm giá</th>
                                     <th>Ảnh bìa </th>
                                     <th>Mô tả sản phẩm </th>
                                     <th width="5%">Sửa</th>
@@ -76,15 +76,17 @@ $msg_type = getFlashData('msg_type');
                                                     <?php echo $item['discount'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['thumbnail']?>
+                                                    <?php echo $item['thumbnail'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['description']?>
+                                                    <?php echo $item['description'] ?>
                                                 </td>
-                                                <td><a href="<?php echo _WEB_HOST;?>?module=users&action=edit&id=<?php echo $item['id']?>" class="btn btn-warning btn-sm"><i
+                                                <td><a href="<?php echo _WEB_HOST; ?>?module=products&action=edit&id=<?php echo $item['id'] ?>"
+                                                        class="btn btn-warning btn-sm"><i
                                                             class="fa-solid fa-pen-to-square"></i></a>
                                                 </td>
-                                                <td><a href="<?php echo _WEB_HOST;?>?module=users&action=delete&id=<?php echo $item['id']?>" onclick="return confirm('Bạn có muốn xóa?')"
+                                                <td><a href="<?php echo _WEB_HOST; ?>?module=products&action=delete&id=<?php echo $item['id'] ?>"
+                                                        onclick="return confirm('Bạn có muốn xóa?')"
                                                         class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a></td>
                                             </tr>
                                             <?php

@@ -13,8 +13,10 @@ if (isPost()) {
     if (empty($filterAll['title'])) {
         $error['title']['required'] = 'Tên sản phẩm không được để trống.';
     } else {
-        if (strlen($filterAll['title']) < 10) {
-            $error['title']['min'] = 'Tên sản phẩm phải có ít nhất 5 ký tự.';
+        $title = $filterAll['title'];
+        $sql = "SELECT * FROM product WHERE title = '$title'";
+        if (getRows($sql) > 0) {
+            $error['title']['unique'] = 'Sản phẩm đã tồn tại.';
         }
     }
     //Validate giá: bắt buộc phải nhập, đúng định dạng số nguyên
