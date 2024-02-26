@@ -16,6 +16,4 @@ if (!defined("_CODE")) {
     <title>
         <?php echo !empty($data['pageTitle']) ? $data['pageTitle'] : 'Quản lý người dùng'; ?>
     </title>
-
-
 </head>

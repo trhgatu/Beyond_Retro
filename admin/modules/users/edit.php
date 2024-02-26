@@ -67,7 +67,7 @@ if (isPost()) {
             'email' => $filterAll['email'],
             'phone_number' => $filterAll['phone_number'],
             'status' => $filterAll['status'],
-            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
         if (!empty($filterAll['password'])) {
             $dataUpdate['password'] = password_hash($filterAll['password'], PASSWORD_DEFAULT);
