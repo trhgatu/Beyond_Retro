@@ -39,10 +39,18 @@ if (!defined("_CODE")) {
         Interface
     </div>
     <!-- Nav Item - Users -->
+
     <li class="nav-item">
         <a class="nav-link" href="?module=users&action=list">
         <i class="fa-solid fa-user"></i>
             <span>Quản lý người dùng</span>
+        </a>
+    </li>
+    <!-- Nav Item - Category -->
+    <li class="nav-item">
+        <a class="nav-link" href="?module=category&action=list">
+        <i class="fa-solid fa-list"></i>
+            <span>Quản lý danh mục</span>
         </a>
     </li>
     <!-- Nav Item - Products -->
