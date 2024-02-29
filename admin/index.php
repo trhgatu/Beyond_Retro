@@ -9,9 +9,6 @@ require_once("./includes/functions.php");
 require_once("./includes/database.php");
 require_once("./includes/session.php");
 
-//setFlashData('msg', 'Cài đặt thành công');
-//echo getFlashData('msg');
-//sendMail('trananhtu1112003@gmail.com', 'Chào Tú', 'Nội dung mail');
 $module = _MODULE;
 $action = _ACTION;
 
@@ -29,8 +26,6 @@ if (!empty($_GET['action'])) {
 
     }
 }
-
-
 $path = 'modules/' . $module . '/' . $action . '.php';
 
 if (file_exists($path)) {

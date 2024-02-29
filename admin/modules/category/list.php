@@ -84,12 +84,8 @@ $msg_type = getFlashData('msg_type');
                                         </tr>
                                         <?php
                                     endif;
-
                                     ?>
-
-
                                 </tbody>
-
                             </table>
                         </div>
                     </div>
