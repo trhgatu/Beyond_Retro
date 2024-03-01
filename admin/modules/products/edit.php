@@ -1,5 +1,9 @@
 <!-- Đăng ký tài khoản -->
 <?php
+$servername = "localhost";
+$username = "root";
+$password = "mysql";
+$dbname = "fashionweb";
 if (!defined("_CODE")) {
     die("Access Denied !");
 }
@@ -54,6 +58,7 @@ if (isPost()) {
     if (empty($error)) {
         $dataUpdate = [
             'title' => $filterAll['title'],
+            'category_id' => $filterAll['category_id'],
             'price' => $filterAll['price'],
             'discount' => $filterAll['discount'],
             'thumbnail' => $filterAll['thumbnail'],
@@ -120,7 +125,7 @@ if ($productDetails) {
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
-                                            <p>Tiêu đề sản phẩm:</p>
+                                            <p>Tên sản phẩm:</p>
                                             <input type="title" class="form-control form-control-user"
                                                 name="title" value="<?php
                                                 echo old('title', $old)
@@ -129,6 +134,29 @@ if ($productDetails) {
                                             echo form_error('title', '<span class= "error">', '</span>', $error);
 
                                             ?>
+                                        </div>
+                                        <div class="form-group">
+
+
+                                            <label for="category">Chọn danh mục:</label>
+                                            <select id="category_id" name="category_id" class="form-control">
+                                                <?php
+                                                try {
+                                                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+                                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                                                    $stmt = $conn->query("SELECT id, name FROM category");
+                                                    $categories = $stmt->fetchAll();
+
+                                                    foreach ($categories as $category) {
+                                                        echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
+                                                    }
+                                                } catch (PDOException $e) {
+                                                    echo "Lỗi kết nối: " . $e->getMessage();
+                                                }
+                                                $conn = null;
+                                                ?>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                         <p>Giá sản phẩm:</p>

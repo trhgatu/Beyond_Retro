@@ -47,6 +47,7 @@ $msg_type = getFlashData('msg_type');
                                 <thead>
                                     <th>STT</th>
                                     <th>Tên sản phẩm</th>
+                                    <th>Danh mục</th>
                                     <th>Giá</th>
                                     <th>Giảm giá</th>
                                     <th>Ảnh bìa </th>
@@ -70,8 +71,27 @@ $msg_type = getFlashData('msg_type');
                                                     <?php echo $item['title'] ?>
                                                 </td>
                                                 <td>
+                                                    <?php
+                                                    $category_id = $item['category_id']; // ID danh mục của sản phẩm
+                                                    $category_name = "";
+                                                    $conn = new PDO("mysql:host=localhost;dbname=fashionweb", "root", "mysql");
+                                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                                                    // Truy vấn để lấy tên danh mục từ bảng danh mục dựa trên category_id của sản phẩm
+                                                    $stmt = $conn->prepare("SELECT name FROM category WHERE id = :category_id");
+                                                    $stmt->bindParam(':category_id', $category_id);
+                                                    $stmt->execute();
+                                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                                                    if ($result) {
+                                                        $category_name = $result['name'];
+                                                    }
+                                                    echo $category_name;
+                                                    ?>
+                                                </td>
+                                                <td>
                                                     <?php echo $item['price'] ?>
                                                 </td>
+
                                                 <td>
                                                     <?php echo $item['discount'] ?>
                                                 </td>

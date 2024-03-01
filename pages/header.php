@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="./index.php"><img src="img/beyond-retro-logo.png" alt=""></a>
+                    <a href="./index.php"><img src="img/beyond-retro-logo.png" style="max-width : 80%" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
