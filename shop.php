@@ -1,5 +1,5 @@
 <?php
-include("admin\config.php");
+include "admin\config.php";
 require_once 'admin\includes\connect.php';
 $sql = "SELECT * FROM product";
 $stmt = $conn->prepare($sql);
@@ -244,7 +244,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="col-lg-4 col-md-6 col-sm-6">
 
                                     <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                                        <div class="product__item__pic set-bg" data-setbg="uploads/<?php echo $item['thumbnail'] ?>">
                                             <ul class="product__hover">
                                                 <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
                                                 <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
@@ -257,13 +257,6 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                 <?php echo $item['title'] ?>
                                             </h6>
                                             <a href="#" class="add-cart">+ Add To Cart</a>
-                                            <div class="rating">
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                            </div>
                                             <h5>
                                                 <?php echo $item['price'] ?>
                                             </h5>

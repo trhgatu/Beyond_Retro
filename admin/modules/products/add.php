@@ -117,8 +117,6 @@ $old = getFlashData('old');
                                             ?>
                                         </div>
                                         <div class="form-group">
-
-
                                             <label for="category">Chọn danh mục:</label>
                                             <select id="category_id" name="category_id" class="form-control">
                                                 <?php
@@ -160,10 +158,14 @@ $old = getFlashData('old');
                                         </div>
                                         <div class="form-group">
                                             <p>Ảnh bìa:</p>
-                                            <input type="" class="form-control form-control-user" name="thumbnail"
-                                                value="<?php
-                                                echo old('thumbnail', $old)
-                                                    ?>">
+                                            <input type="file" class="form-control form-control-user" name="thumbnail"
+                                                value="<?php echo old('thumbnail', $old) ?>">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <p>Thư viện ảnh:</p>
+                                            <input multiple type="file" class="form-control form-control-user" name="galery[]"
+                                                value="<?php echo old('thumbnail', $old) ?>">
 
                                         </div>
                                         <div class="form-group">
@@ -191,10 +193,6 @@ $old = getFlashData('old');
                                     <div class="col-sm-6"><a href="?module=products&action=list"
                                             class="mg-btn btn btn-success btn-block">Quay lại</a></div>
                                 </div>
-
-
-
-
                             </form>
                             <hr>
 

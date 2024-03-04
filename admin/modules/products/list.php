@@ -96,7 +96,7 @@ $msg_type = getFlashData('msg_type');
                                                     <?php echo $item['discount'] ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $item['thumbnail'] ?>
+                                                    <img src="../uploads/<?php echo $item['thumbnail'] ?>" style="max-width: 180px;">
                                                 </td>
                                                 <td>
                                                     <?php echo $item['description'] ?>

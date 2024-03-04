@@ -18,7 +18,7 @@ if (!empty($filterAll['id'])) {
         //Tồn tại
         setFlashData('product-detail', $productDetail);
     } else {
-        redirect('module=products&action=list');
+        redirect('?module=products&action=list');
     }
 }
 $data = [
@@ -110,8 +110,6 @@ if ($productDetails) {
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-
-
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Sửa sản phẩm </h1>
@@ -121,7 +119,7 @@ if ($productDetails) {
                                 getMSG($msg, $msg_type);
                             }
                             ?>
-                            <form class="user" method="post">
+                            <form class="products" method="post">
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
@@ -132,12 +130,9 @@ if ($productDetails) {
                                                     ?>">
                                             <?php
                                             echo form_error('title', '<span class= "error">', '</span>', $error);
-
                                             ?>
                                         </div>
                                         <div class="form-group">
-
-
                                             <label for="category">Chọn danh mục:</label>
                                             <select id="category_id" name="category_id" class="form-control">
                                                 <?php
@@ -166,7 +161,6 @@ if ($productDetails) {
                                                     ?>">
                                             <?php
                                             echo form_error('price', '<span class= "error">', '</span>', $error);
-
                                             ?>
                                         </div>
                                         <div class="form-group">
@@ -175,14 +169,11 @@ if ($productDetails) {
                                                  name="discount" value="<?php
                                                 echo old('discount', $old)
                                                     ?>">
-
                                         </div>
                                         <div class="form-group">
                                             <p>Ảnh bìa:</p>
-                                            <input type="" class="form-control form-control-user"
-                                                 name="thumbnail" value="<?php
-                                                echo old('thumbnail', $old)
-                                                    ?>">
+                                            <input type="file" class="form-control form-control-user" name="thumbnail"
+                                                value="<?php echo old('thumbnail', $old) ?>">
 
                                         </div>
                                         <div class="form-group">
@@ -196,10 +187,7 @@ if ($productDetails) {
 
                                             ?>
                                         </div>
-
-
                                     </div>
-
                                 </div>
                                 <div class="form-group row">
                                 <input type="hidden" name="id" value="<?php echo $productId ?>">
@@ -211,16 +199,9 @@ if ($productDetails) {
                                     <div class="col-sm-6"><a href="?module=products&action=list" class="mg-btn btn btn-success btn-block"
                                     >Quay lại</a></div>
                                 </div>
-
-
-
-
                             </form>
                             <hr>
-
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -229,5 +210,4 @@ if ($productDetails) {
         layouts('footer', $data);
         ?>
     </div>
-
 </div>

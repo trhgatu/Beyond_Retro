@@ -33,7 +33,6 @@
     include("pages/menu.php");
     include("pages/main.php");
     include("pages/footer.php");
-    include("pages/search.php");
     ?>
     <!-- Js Plugins -->
     <script src="js/jquery-3.3.1.min.js"></script>
