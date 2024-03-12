@@ -1,10 +1,6 @@
 <!-- Đăng ký tài khoản -->
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "mysql";
-$dbname = "fashionweb";
-
+require_once '../admin/includes/connect.php';
 if (!defined("_CODE")) {
     die("Access Denied !");
 }
@@ -12,6 +8,7 @@ $data = [
     'pageTitle' => 'Thêm sản phẩm mới'
 ];
 if (isPost()) {
+    // Xử lý dữ liệu từ form mức 2
     $filterAll = filter();
     $error = [];//Mảng chữa lỗi
     //Validate title: bắt buộc phải nhập
@@ -53,8 +50,13 @@ if (isPost()) {
             'created_at' => date('Y-m-d H:i:s'),
         ];
         $insertStatus = insert('product', $dataInsert);
-
-
+        $product_id = $conn->lastInsertId();
+        $dataImagesInsert = [
+            'product_id' => $product_id, // Sử dụng product_id của sản phẩm vừa thêm
+            'images_path' => $filterAll['images_path'],
+            'uploaded_on' => date('Y-m-d H:i:s'),
+        ];
+        $insertImageStatus = insert('galery', $dataImagesInsert);
         if ($insertStatus) {
             setFlashData('msg', 'Thêm sản phẩm mới thành công.');
             setFlashData('msg_type', 'success');
@@ -71,7 +73,10 @@ if (isPost()) {
         setFlashData('old', $filterAll);
         redirect('?module=products&action=add');
     }
+
+    // Xử lý form mức 2 ở đây
 }
+
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
 $error = getFlashData('error');
@@ -120,20 +125,13 @@ $old = getFlashData('old');
                                             <label for="category">Chọn danh mục:</label>
                                             <select id="category_id" name="category_id" class="form-control">
                                                 <?php
-                                                try {
-                                                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-                                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                                                    $stmt = $conn->query("SELECT id, name FROM category");
-                                                    $categories = $stmt->fetchAll();
-
-                                                    foreach ($categories as $category) {
-                                                        echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
-                                                    }
-                                                } catch (PDOException $e) {
-                                                    echo "Lỗi kết nối: " . $e->getMessage();
+                                                $sql = "SELECT id, name FROM category";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+                                                $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                foreach ($categories as $category) {
+                                                    echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
                                                 }
-                                                $conn = null;
                                                 ?>
                                             </select>
                                         </div>
@@ -163,11 +161,37 @@ $old = getFlashData('old');
 
                                         </div>
                                         <div class="form-group">
-                                            <p>Thư viện ảnh:</p>
-                                            <input multiple type="file" class="form-control form-control-user" name="galery[]"
-                                                value="<?php echo old('thumbnail', $old) ?>">
-
+                                            <p>Ảnh:</p>
+                                            <input type="file" class="form-control form-control-user"
+                                                name="images_path[]" id="uploadInput" multiple>
+                                            <div id="imagePreview"></div>
                                         </div>
+
+                                        <script>
+                                            document.getElementById('uploadInput').addEventListener('change', function () {
+                                                var files = this.files;
+                                                var imagePreview = document.getElementById('imagePreview');
+                                                imagePreview.innerHTML = ''; // Xóa hình ảnh trước đó
+                                                for(var i = 0; i < files.length; i++) {
+                                                    var file = files[i];
+                                                    var imageType = /image.*/;
+                                                    if(!file.type.match(imageType)) {
+                                                        continue;
+                                                    }
+                                                    var img = document.createElement('img');
+                                                    img.classList.add('img-preview');
+                                                    img.file = file;
+                                                    imagePreview.appendChild(img);
+                                                    var reader = new FileReader();
+                                                    reader.onload = (function (aImg) {
+                                                        return function (e) {
+                                                            aImg.src = e.target.result;
+                                                        };
+                                                    })(img);
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            });
+                                        </script>
                                         <div class="form-group">
                                             <p>Mô tả:</p>
                                             <input type="text" class="form-control form-control-user" name="description"
@@ -186,7 +210,7 @@ $old = getFlashData('old');
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <button type="submit" class="mg-btn btn btn-primary btn-block">
+                                        <button type="submit" class="mg-btn btn btn-primary btn-block" name="submit">
                                             Thêm
                                         </button>
                                     </div>

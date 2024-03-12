@@ -1,4 +1,4 @@
-<!-- Đăng ký tài khoản -->
+<!-- Sửa tài khoản -->
 <?php
 $servername = "localhost";
 $username = "root";
@@ -10,9 +10,6 @@ if (!defined("_CODE")) {
 $filterAll = filter();
 if (!empty($filterAll['id'])) {
     $productId = $filterAll['id'];
-    //Kiểm tra xem userid có tồn tại trong database
-//Nếu tồn tại - lấy ra thông tin user
-//Nếu không tồn tại - chuyển hướng về trang danh sách
     $productDetail = oneRaw("SELECT * FROM product WHERE id='$productId'");
     if (!empty($productDetail)) {
         //Tồn tại
@@ -26,15 +23,13 @@ $data = [
 ];
 if (isPost()) {
     $filterAll = filter();
-    $error = [];//Mảng chữa lỗi
+    $error = [];
     //Validate title: bắt buộc phải nhập
     if (empty($filterAll['title'])) {
         $error['title']['required'] = 'Tên sản phẩm không được để trống.';
     } else {
-        $title = $filterAll['title'];
-        $sql = "SELECT * FROM product WHERE title = '$title'";
-        if (getRows($sql) > 0) {
-            $error['title']['unique'] = 'Sản phẩm đã tồn tại.';
+        if (strlen($filterAll['title']) < 5) {
+            $error['title']['min'] = 'Tên sản phẩm phải có ít nhất 10 ký tự.';
         }
     }
     //Validate giá: bắt buộc phải nhập, đúng định dạng số nguyên
@@ -44,16 +39,14 @@ if (isPost()) {
         if (!isNumberInt($filterAll['price'])) {
             $error['price']['isNumberInt'] = 'Giá phải có giá trị là số nguyên.';
         }
-
     }
     //Validate mô tả: bắt buộc phải nhập, > 50 ký tự
     if (empty($filterAll['description'])) {
         $error['description']['required'] = 'Mô tả không được để trống.';
     }else {
-        if (strlen($filterAll['description']) < 50) {
-            $error['description']['min'] = 'Mô tả phải có ít nhất 50 ký tự.';
+        if (strlen($filterAll['description']) < 20) {
+            $error['description']['min'] = 'Mô tả phải có ít nhất 20 ký tự.';
         }
-
     }
     if (empty($error)) {
         $dataUpdate = [
@@ -85,7 +78,6 @@ if (isPost()) {
         redirect('?module=products&action=edit');
     }
     redirect('?module=products&action=edit&id=' . $productId);
-
 }
 $msg = getFlashData('msg');
 $msg_type = getFlashData('msg_type');
@@ -184,7 +176,6 @@ if ($productDetails) {
                                                     ?>">
                                             <?php
                                             echo form_error('description', '<span class= "error">', '</span>', $error);
-
                                             ?>
                                         </div>
                                     </div>

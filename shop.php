@@ -89,7 +89,6 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                                 <ul class="nice-scroll">
                                                     <?php
-
                                                     $sql = "SELECT * FROM category";
                                                     $stmt = $conn->prepare($sql);
                                                     $stmt->execute();
