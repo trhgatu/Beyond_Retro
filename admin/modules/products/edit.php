@@ -166,8 +166,32 @@ if ($productDetails) {
                                             <p>Ảnh bìa:</p>
                                             <input type="file" class="form-control form-control-user" name="thumbnail"
                                                 value="<?php echo old('thumbnail', $old) ?>">
-
                                         </div>
+                                        <script>
+                                            document.getElementById('uploadInput').addEventListener('change', function () {
+                                                var files = this.files;
+                                                var imagePreview = document.getElementById('imagePreview');
+                                                imagePreview.innerHTML = ''; // Xóa hình ảnh trước đó
+                                                for(var i = 0; i < files.length; i++) {
+                                                    var file = files[i];
+                                                    var imageType = /image.*/;
+                                                    if(!file.type.match(imageType)) {
+                                                        continue;
+                                                    }
+                                                    var img = document.createElement('img');
+                                                    img.classList.add('img-preview');
+                                                    img.file = file;
+                                                    imagePreview.appendChild(img);
+                                                    var reader = new FileReader();
+                                                    reader.onload = (function (aImg) {
+                                                        return function (e) {
+                                                            aImg.src = e.target.result;
+                                                        };
+                                                    })(img);
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            });
+                                        </script>
                                         <div class="form-group">
                                             <p>Mô tả:</p>
                                             <input type="text" class="form-control form-control-user"

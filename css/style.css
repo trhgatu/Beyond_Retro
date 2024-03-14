@@ -975,7 +975,7 @@ ol {
 
 .product__item {
 	overflow: hidden;
-	margin-bottom: 40px;
+	margin-bottom: 20px;
 }
 
 .product__item.sale .product__item__pic .label {
@@ -997,13 +997,16 @@ ol {
 }
 
 .product__item:hover .product__item__text a {
-	top: 22px;
+	left: 100px;
 	opacity: 1;
 	visibility: visible;
 }
 
 .product__item:hover .product__item__text h6 {
-	opacity: 0;
+	opacity: 0.5;
+}
+.product__item:hover .product__item__text h5 {
+	opacity: 0.5;
 }
 
 .product__item:hover .product__item__text .product__color__select {
@@ -1088,7 +1091,7 @@ ol {
 }
 
 .product__item__text {
-	padding-top: 25px;
+	padding-top: 20px;
 	position: relative;
 }
 
@@ -1108,7 +1111,7 @@ ol {
 
 .product__item__text h6 {
 	color: #111111;
-	font-size: 15px;
+	font-size: 18px;
 	font-weight: 600;
 	margin-bottom: 5px;
 	-webkit-transition: all, 0.3s;
@@ -1128,7 +1131,8 @@ ol {
 
 .product__item__text h5 {
 	color: #0d0d0d;
-	font-weight: 700;
+	font-weight: 200;
+	font-size: 15px;
 }
 
 .product__item__text .product__color__select {
@@ -1187,7 +1191,7 @@ ol {
 -----------------------*/
 
 .shop__sidebar {
-	padding-right: 20px;
+	padding-right: 25px;
 }
 
 .shop__sidebar__search {

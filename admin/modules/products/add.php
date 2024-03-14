@@ -8,9 +8,9 @@ $data = [
     'pageTitle' => 'Thêm sản phẩm mới'
 ];
 if (isPost()) {
-    // Xử lý dữ liệu từ form mức 2
     $filterAll = filter();
-    $error = [];//Mảng chữa lỗi
+    $error = [];
+    //Mảng chữa lỗi
     //Validate title: bắt buộc phải nhập
     if (empty($filterAll['title'])) {
         $error['title']['required'] = 'Tên sản phẩm không được để trống.';
@@ -44,16 +44,16 @@ if (isPost()) {
             'title' => $filterAll['title'],
             'category_id' => $filterAll['category_id'],
             'price' => $filterAll['price'],
-            'discount' => $filterAll['discount'],
             'thumbnail' => $filterAll['thumbnail'],
             'description' => $filterAll['description'],
             'created_at' => date('Y-m-d H:i:s'),
         ];
         $insertStatus = insert('product', $dataInsert);
         $product_id = $conn->lastInsertId();
+        // Chèn chuỗi đường dẫn vào cơ sở dữ liệu
         $dataImagesInsert = [
-            'product_id' => $product_id, // Sử dụng product_id của sản phẩm vừa thêm
-            'images_path' => $filterAll['images_path'],
+            'product_id' => $product_id,
+            'images_path' => implode(",", $filterAll['images_path']), // Lưu trữ chuỗi đường dẫn tương đối đến ảnh
             'uploaded_on' => date('Y-m-d H:i:s'),
         ];
         $insertImageStatus = insert('galery', $dataImagesInsert);
@@ -143,22 +143,14 @@ $old = getFlashData('old');
                                                     ?>">
                                             <?php
                                             echo form_error('price', '<span class= "error">', '</span>', $error);
-
                                             ?>
                                         </div>
-                                        <div class="form-group">
-                                            <p>Giảm giá:</p>
-                                            <input type="text" class="form-control form-control-user" name="discount"
-                                                value="<?php
-                                                echo old('discount', $old)
-                                                    ?>">
 
-                                        </div>
                                         <div class="form-group">
                                             <p>Ảnh bìa:</p>
                                             <input type="file" class="form-control form-control-user" name="thumbnail"
-                                                value="<?php echo old('thumbnail', $old) ?>">
-
+                                                onchange="readURL(this);">
+                                            <img  id="ShowImage"/>
                                         </div>
                                         <div class="form-group">
                                             <p>Ảnh:</p>
@@ -166,8 +158,28 @@ $old = getFlashData('old');
                                                 name="images_path[]" id="uploadInput" multiple>
                                             <div id="imagePreview"></div>
                                         </div>
+                                        <style>
+                                            .img-preview {
+                                                width: 200px;
+                                                padding: 20px;
+                                            }
+                                        </style>
 
                                         <script>
+                                            function readURL(input) {
+                                                if(input.files && input.files[0]) {
+                                                    var reader = new FileReader();
+
+                                                    reader.onload = function (e) {
+                                                        $('#ShowImage')
+                                                            .attr('src', e.target.result)
+                                                            .width(150)
+                                                            .height(200);
+                                                    };
+
+                                                    reader.readAsDataURL(input.files[0]);
+                                                }
+                                            }
                                             document.getElementById('uploadInput').addEventListener('change', function () {
                                                 var files = this.files;
                                                 var imagePreview = document.getElementById('imagePreview');

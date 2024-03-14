@@ -242,14 +242,11 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 ?>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
 
+
                                     <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="uploads/<?php echo $item['thumbnail'] ?>">
-                                            <ul class="product__hover">
-                                                <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                                                <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a>
-                                                </li>
-                                                <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                                            </ul>
+                                        <div class="product__item__pic set-bg"
+                                            data-setbg="images/<?php echo $item['thumbnail'] ?>">
+
                                         </div>
                                         <div class="product__item__text">
                                             <h6>
@@ -262,6 +259,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                                         </div>
                                     </div>
+
                                 </div>
                                 <?php
                             endforeach;
@@ -296,6 +294,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Shop Section End -->
 
     <!-- Footer Section Begin -->
+
     <?php
     include('pages/footer.php');
     ?>

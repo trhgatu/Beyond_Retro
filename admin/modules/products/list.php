@@ -49,7 +49,6 @@ $msg_type = getFlashData('msg_type');
                                     <th>Tên sản phẩm</th>
                                     <th>Danh mục</th>
                                     <th>Giá</th>
-                                    <th>Giảm giá</th>
                                     <th>Ảnh bìa </th>
                                     <th>Mô tả sản phẩm </th>
                                     <th width="5%">Sửa</th>
@@ -92,11 +91,9 @@ $msg_type = getFlashData('msg_type');
                                                     <?php echo $item['price'] ?>
                                                 </td>
 
+
                                                 <td>
-                                                    <?php echo $item['discount'] ?>
-                                                </td>
-                                                <td>
-                                                    <img src="../uploads/<?php echo $item['thumbnail'] ?>" style="max-width: 180px;">
+                                                    <img src="../images/<?php echo $item['thumbnail'] ?>" style="max-width: 180px;">
                                                 </td>
                                                 <td>
                                                     <?php echo $item['description'] ?>
