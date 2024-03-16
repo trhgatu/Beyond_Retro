@@ -9,12 +9,15 @@ if (!empty($filterAll['id'])) {
     $productDetail = getRaw("SELECT * FROM product WHERE id = $productId");
     if ($productDetail > 0) {
         //Thực hiện xóa
-        $deleteProduct = delete('product', "id = $productId");
-        if ($deleteProduct) {
-            setFlashData('msg', 'Xóa sản phẩm thành công.');
-            setFlashData('msg_type', 'success');
+        $deleteGalery = delete('galery',"product_id = $productId");
+        if($deleteGalery)
+        {
+            $deleteProduct = delete('product', "id = $productId");
+            if ($deleteProduct) {
+                setFlashData('msg', 'Xóa sản phẩm thành công.');
+                setFlashData('msg_type', 'success');
+            }
         }
-
     } else {
         setFlashData('msg', 'Sản phẩm không tồn tại trong hệ thống.');
         setFlashData('msg_type', 'danger');

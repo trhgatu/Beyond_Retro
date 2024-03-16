@@ -45,7 +45,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Header Section Begin -->
     <?php
-    include('pages/header.php');
+    include ('pages/header.php');
     ?>
     <!-- Header Section End -->
     <section class="breadcrumb-option">
@@ -81,7 +81,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="accordion" id="accordionExample">
                                 <div class="card">
                                     <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                        <a data-toggle="collapse" data-target="#collapseOne">Danh mục</a>
                                     </div>
                                     <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                         <div class="card-body">
@@ -93,7 +93,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                                     $stmt = $conn->prepare($sql);
                                                     $stmt->execute();
                                                     $listCategory = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                                    if (!empty($listCategory)):
+                                                    if (!empty ($listCategory)):
                                                         foreach ($listCategory as $item):
                                                             ?>
                                                             <li><a href="#">
@@ -139,7 +139,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                                 <div class="card">
                                     <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                        <a data-toggle="collapse" data-target="#collapseThree">Giá sản phẩm</a>
                                     </div>
                                     <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
                                         <div class="card-body">
@@ -156,41 +156,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="card-heading">
-                                        <a data-toggle="collapse" data-target="#collapseFour">Size</a>
-                                    </div>
-                                    <div id="collapseFour" class="collapse show" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <div class="shop__sidebar__size">
-                                                <label for="xs">xs
-                                                    <input type="radio" id="xs">
-                                                </label>
-                                                <label for="sm">s
-                                                    <input type="radio" id="sm">
-                                                </label>
-                                                <label for="md">m
-                                                    <input type="radio" id="md">
-                                                </label>
-                                                <label for="xl">xl
-                                                    <input type="radio" id="xl">
-                                                </label>
-                                                <label for="2xl">2xl
-                                                    <input type="radio" id="2xl">
-                                                </label>
-                                                <label for="xxl">xxl
-                                                    <input type="radio" id="xxl">
-                                                </label>
-                                                <label for="3xl">3xl
-                                                    <input type="radio" id="3xl">
-                                                </label>
-                                                <label for="4xl">4xl
-                                                    <input type="radio" id="4xl">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="card">
                                     <div class="card-heading">
                                         <a data-toggle="collapse" data-target="#collapseSix">Tags</a>
@@ -218,7 +184,9 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="shop__product__option__left">
-                                    <p>Showing 1–12 of 126 results</p>
+                                    <h4>Tất cả sản phẩm</h4>
+                                    <hr style="width:207%">
+                                    </hr>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -237,7 +205,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php
 
                         // thay "ten_bang_san_pham" bằng tên bảng chứa thông tin sản phẩm
-                        if (!empty($listProduct)):
+                        if (!empty ($listProduct)):
                             foreach ($listProduct as $item):
                                 ?>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
@@ -248,16 +216,19 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             data-setbg="images/<?php echo $item['thumbnail'] ?>">
 
                                         </div>
-                                        <div class="product__item__text">
-                                            <h6>
+                                        <div class="product__item__title">
+
+                                            <a href="#">
                                                 <?php echo $item['title'] ?>
-                                            </h6>
-                                            <a href="#" class="add-cart">+ Add To Cart</a>
+                                            </a>
+                                        </div>
+                                        <div class="product__item__text">
                                             <h5>
                                                 <?php echo $item['price'] ?>
                                             </h5>
-
                                         </div>
+
+
                                     </div>
 
                                 </div>
@@ -296,7 +267,7 @@ $listProduct = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Footer Section Begin -->
 
     <?php
-    include('pages/footer.php');
+    include ('pages/footer.php');
     ?>
 
     <!-- Search Begin -->

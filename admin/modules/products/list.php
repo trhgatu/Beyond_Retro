@@ -1,6 +1,6 @@
 <?php
 if (!defined("_CODE")) {
-    die("Access Denied !");
+    die ("Access Denied !");
 }
 $data = [
     'pageTitle' => 'Danh sách sản phẩm'
@@ -37,7 +37,7 @@ $msg_type = getFlashData('msg_type');
 
                     </div>
                     <?php
-                    if (!empty($msg)) {
+                    if (!empty ($msg)) {
                         getMSG($msg, $msg_type);
                     }
                     ?>
@@ -50,6 +50,7 @@ $msg_type = getFlashData('msg_type');
                                     <th>Danh mục</th>
                                     <th>Giá</th>
                                     <th>Ảnh bìa </th>
+                                    <th>Thư viện ảnh</th>
                                     <th>Mô tả sản phẩm </th>
                                     <th width="5%">Sửa</th>
                                     <th width="5%">Xóa</th>
@@ -57,7 +58,7 @@ $msg_type = getFlashData('msg_type');
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if (!empty($listProducts)):
+                                    if (!empty ($listProducts)):
                                         $count = 0; //STT
                                         foreach ($listProducts as $item):
                                             $count++;
@@ -90,10 +91,28 @@ $msg_type = getFlashData('msg_type');
                                                 <td>
                                                     <?php echo $item['price'] ?>
                                                 </td>
-
-
                                                 <td>
-                                                    <img src="../images/<?php echo $item['thumbnail'] ?>" style="max-width: 180px;">
+                                                    <img src="../images/<?php echo $item['thumbnail'] ?>"
+                                                        style="max-width: 180px;">
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    $product_id = $item['id']; // Lấy ID của sản phẩm
+                                                    $conn = new PDO("mysql:host=localhost;dbname=fashionweb", "root", "mysql");
+                                                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                                    // Truy vấn để lấy tất cả các hình ảnh từ bảng gallery dựa trên product_id của sản phẩm
+                                                    $stmt = $conn->prepare("SELECT images_path FROM galery WHERE product_id = :product_id");
+                                                    $stmt->bindParam(':product_id', $product_id);
+                                                    $stmt->execute();
+                                                    $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                    foreach ($images as $image) {
+                                                        $image_paths = explode(",", $image['images_path']);
+                                                        foreach ($image_paths as $image_path) {
+                                                            // Hiển thị mỗi ảnh trong thẻ <img>
+                                                            echo "<img src='../images/$image_path' style='max-width: 180px;'> ";
+                                                        }
+                                                    }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $item['description'] ?>

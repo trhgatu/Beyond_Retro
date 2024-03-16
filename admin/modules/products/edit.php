@@ -1,17 +1,18 @@
 <!-- Sửa tài khoản -->
 <?php
+if (!defined("_CODE")) {
+    die ("Access Denied !");
+}
 $servername = "localhost";
 $username = "root";
 $password = "mysql";
 $dbname = "fashionweb";
-if (!defined("_CODE")) {
-    die("Access Denied !");
-}
+
 $filterAll = filter();
-if (!empty($filterAll['id'])) {
+if (!empty ($filterAll['id'])) {
     $productId = $filterAll['id'];
     $productDetail = oneRaw("SELECT * FROM product WHERE id='$productId'");
-    if (!empty($productDetail)) {
+    if (!empty ($productDetail)) {
         //Tồn tại
         setFlashData('product-detail', $productDetail);
     } else {
@@ -25,7 +26,7 @@ if (isPost()) {
     $filterAll = filter();
     $error = [];
     //Validate title: bắt buộc phải nhập
-    if (empty($filterAll['title'])) {
+    if (empty ($filterAll['title'])) {
         $error['title']['required'] = 'Tên sản phẩm không được để trống.';
     } else {
         if (strlen($filterAll['title']) < 5) {
@@ -33,43 +34,51 @@ if (isPost()) {
         }
     }
     //Validate giá: bắt buộc phải nhập, đúng định dạng số nguyên
-    if (empty($filterAll['price'])) {
+    if (empty ($filterAll['price'])) {
         $error['price']['required'] = 'Giá không được để trống.';
-    }else {
+    } else {
         if (!isNumberInt($filterAll['price'])) {
             $error['price']['isNumberInt'] = 'Giá phải có giá trị là số nguyên.';
         }
     }
     //Validate mô tả: bắt buộc phải nhập, > 50 ký tự
-    if (empty($filterAll['description'])) {
+    if (empty ($filterAll['description'])) {
         $error['description']['required'] = 'Mô tả không được để trống.';
-    }else {
+    } else {
         if (strlen($filterAll['description']) < 20) {
             $error['description']['min'] = 'Mô tả phải có ít nhất 20 ký tự.';
         }
     }
-    if (empty($error)) {
+    if (empty ($error)) {
         $dataUpdate = [
             'title' => $filterAll['title'],
             'category_id' => $filterAll['category_id'],
             'price' => $filterAll['price'],
-            'discount' => $filterAll['discount'],
             'thumbnail' => $filterAll['thumbnail'],
             'description' => $filterAll['description'],
             'updated_at' => date('Y-m-d H:i:s'),
         ];
         $condition = "id = $productId";
         $UpdateStatus = update('product', $dataUpdate, $condition);
+        $conditionImg = "product_id = $productId";
+        $dataImagesUpdate = [
+            'product_id' => $productId,
+            'images_path' => implode(",", $filterAll['images_path']),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
+        $UpdateImagesStatus = update('galery', $dataImagesUpdate, $conditionImg);
+        if ($UpdateStatus && $UpdateImagesStatus) {
 
-        if ($UpdateStatus) {
-                setFlashData('msg', 'Sửa sản phẩm thành công.');
-                setFlashData('msg_type', 'success');
-                redirect('?module=products&action=list');
-            } else {
-                setFlashData('msg', 'Sửa sản phẩm thất bại, vui lòng thử lại.');
-                setFlashData('msg_type', 'danger');
-            }
+
+            setFlashData('msg', 'Cập nhật sản phẩm thành công.');
+            setFlashData('msg_type', 'success');
+            redirect('?module=products&action=list');
+        } else {
+            setFlashData('msg', 'Cập nhật sản phẩm thất bại, vui lòng thử lại.');
+            setFlashData('msg_type', 'danger');
+        }
         redirect('?module=products&action=edit');
+
     } else {
         setFlashData('msg', 'Vui lòng kiểm tra lại dữ liệu');
         setFlashData('msg_type', 'danger');
@@ -107,7 +116,7 @@ if ($productDetails) {
                                 <h1 class="h4 text-gray-900 mb-4">Sửa sản phẩm </h1>
                             </div>
                             <?php
-                            if (!empty($msg)) {
+                            if (!empty ($msg)) {
                                 getMSG($msg, $msg_type);
                             }
                             ?>
@@ -116,8 +125,8 @@ if ($productDetails) {
                                     <div class="col">
                                         <div class="form-group">
                                             <p>Tên sản phẩm:</p>
-                                            <input type="title" class="form-control form-control-user"
-                                                name="title" value="<?php
+                                            <input type="title" class="form-control form-control-user" name="title"
+                                                value="<?php
                                                 echo old('title', $old)
                                                     ?>">
                                             <?php
@@ -146,30 +155,80 @@ if ($productDetails) {
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                        <p>Giá sản phẩm:</p>
-                                            <input type="text" class="form-control form-control-user"
-                                                 name="price" value="<?php
+                                            <p>Giá sản phẩm:</p>
+                                            <input type="text" class="form-control form-control-user" name="price"
+                                                value="<?php
                                                 echo old('price', $old)
                                                     ?>">
                                             <?php
                                             echo form_error('price', '<span class= "error">', '</span>', $error);
                                             ?>
                                         </div>
-                                        <div class="form-group">
-                                        <p>Giảm giá:</p>
-                                            <input type="text" class="form-control form-control-user"
-                                                 name="discount" value="<?php
-                                                echo old('discount', $old)
-                                                    ?>">
-                                        </div>
+
                                         <div class="form-group">
                                             <p>Ảnh bìa:</p>
                                             <input type="file" class="form-control form-control-user" name="thumbnail"
-                                                value="<?php echo old('thumbnail', $old) ?>">
+                                                onchange="readThumbnailURL(this);">
+                                            <?php if (!empty ($old['thumbnail'])): ?>
+                                                <img id="ShowImage" src="../images/<?php echo $old['thumbnail']; ?>"
+                                                    width="150" height="200" />
+                                            <?php else: ?>
+                                                <p>Không có hình ảnh bìa hiện tại.</p>
+                                            <?php endif; ?>
                                         </div>
+                                        <div class="form-group">
+                                            <?php
+                                            // Thực hiện truy vấn để lấy danh sách các ảnh từ bảng galery dựa trên product_id
+                                            $conn = new PDO("mysql:host=localhost;dbname=fashionweb", "root", "mysql");
+                                            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                                            // Sau đó, thực hiện truy vấn
+                                            $stmt = $conn->prepare("SELECT images_path FROM galery WHERE product_id = :product_id");
+                                            $stmt->bindParam(':product_id', $productId);
+                                            $stmt->execute();
+                                            $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                            ?>
+                                            <p>Thư viện ảnh:</p>
+                                            <input type="file" class="form-control form-control-user"
+                                                onchange="readGalleryURL(this);" name="images_path[]" id="uploadInput"
+                                                multiple>
+                                            <div id="imagePreview">
+                                                <?php
+                                                // Hiển thị các hình ảnh từ bảng galery
+                                                if ($stmt->rowCount() > 0) {
+                                                    foreach ($images as $image) {
+                                                        $image_paths = explode(",", $image['images_path']);
+                                                        foreach ($image_paths as $image_path) {
+                                                            // Hiển thị mỗi ảnh trong thẻ <img>
+                                                            echo "<img src='../images/$image_path' style='max-width: 180px;'> ";
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                        <style>
+                                            .img-preview {
+                                                width: 200px;
+                                                padding: 20px;
+                                            }
+                                        </style>
                                         <script>
-                                            document.getElementById('uploadInput').addEventListener('change', function () {
-                                                var files = this.files;
+                                            function readThumbnailURL(input) {
+                                                if(input.files && input.files[0]) {
+                                                    var reader = new FileReader();
+                                                    reader.onload = function (e) {
+                                                        $('#ShowImage')
+                                                            .attr('src', e.target.result)
+                                                            .width(150)
+                                                            .height(200);
+                                                    };
+                                                    reader.readAsDataURL(input.files[0]);
+                                                }
+                                            }
+
+                                            function readGalleryURL(input) {
+                                                var files = input.files;
                                                 var imagePreview = document.getElementById('imagePreview');
                                                 imagePreview.innerHTML = ''; // Xóa hình ảnh trước đó
                                                 for(var i = 0; i < files.length; i++) {
@@ -190,12 +249,23 @@ if ($productDetails) {
                                                     })(img);
                                                     reader.readAsDataURL(file);
                                                 }
+                                            }
+
+                                            document.getElementById('uploadInput').addEventListener('change', function () {
+                                                readGalleryURL(this);
                                             });
+
+                                            document.getElementById('uploadThumbnail').addEventListener('change', function () {
+                                                readThumbnailURL(this);
+                                            });
+
+
                                         </script>
+
                                         <div class="form-group">
                                             <p>Mô tả:</p>
-                                            <input type="text" class="form-control form-control-user"
-                                                 name="description" value="<?php
+                                            <input type="text" class="form-control form-control-user" name="description"
+                                                value="<?php
                                                 echo old('description', $old)
                                                     ?>">
                                             <?php
@@ -205,14 +275,14 @@ if ($productDetails) {
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                <input type="hidden" name="id" value="<?php echo $productId ?>">
+                                    <input type="hidden" name="id" value="<?php echo $productId ?>">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <button type="submit" class="mg-btn btn btn-primary btn-block">
-                                    Cập nhật
-                                </button>
+                                        <button type="submit" class="mg-btn btn btn-primary btn-block">
+                                            Cập nhật
+                                        </button>
                                     </div>
-                                    <div class="col-sm-6"><a href="?module=products&action=list" class="mg-btn btn btn-success btn-block"
-                                    >Quay lại</a></div>
+                                    <div class="col-sm-6"><a href="?module=products&action=list"
+                                            class="mg-btn btn btn-success btn-block">Quay lại</a></div>
                                 </div>
                             </form>
                             <hr>

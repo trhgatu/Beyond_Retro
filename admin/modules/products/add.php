@@ -54,10 +54,10 @@ if (isPost()) {
         $dataImagesInsert = [
             'product_id' => $product_id,
             'images_path' => implode(",", $filterAll['images_path']), // Lưu trữ chuỗi đường dẫn tương đối đến ảnh
-            'uploaded_on' => date('Y-m-d H:i:s'),
+            'created_at' => date('Y-m-d H:i:s'),
         ];
         $insertImageStatus = insert('galery', $dataImagesInsert);
-        if ($insertStatus) {
+        if ($insertStatus && $insertImageStatus) {
             setFlashData('msg', 'Thêm sản phẩm mới thành công.');
             setFlashData('msg_type', 'success');
             redirect('?module=products&action=list');
@@ -150,7 +150,7 @@ $old = getFlashData('old');
                                             <p>Ảnh bìa:</p>
                                             <input type="file" class="form-control form-control-user" name="thumbnail"
                                                 onchange="readURL(this);">
-                                            <img  id="ShowImage"/>
+                                            <img id="ShowImage"/>
                                         </div>
                                         <div class="form-group">
                                             <p>Ảnh:</p>
@@ -169,14 +169,12 @@ $old = getFlashData('old');
                                             function readURL(input) {
                                                 if(input.files && input.files[0]) {
                                                     var reader = new FileReader();
-
                                                     reader.onload = function (e) {
                                                         $('#ShowImage')
                                                             .attr('src', e.target.result)
                                                             .width(150)
                                                             .height(200);
                                                     };
-
                                                     reader.readAsDataURL(input.files[0]);
                                                 }
                                             }
